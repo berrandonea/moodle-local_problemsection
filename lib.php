@@ -326,8 +326,7 @@ function local_problemsection_createtool($tool, $data, $section, $groupingid) {
     $now = time();
     $instance = new stdClass();
     $instance->course = $data->courseid;
-    $instance->name = get_string('pluginname', "mod_$tool").' '
-            .get_string('for', 'local_problemsection').' '.$data->name;
+    $instance->name = get_string('pluginname', "mod_$tool");
     $instance->intro = get_string('pleaseuse', 'local_problemsection').' '.$data->name;
     $instance->introformat = 1;
     $instance->id = $DB->insert_record($tool, $instance);

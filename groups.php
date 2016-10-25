@@ -167,11 +167,10 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
         echo html_writer::table($groupinfotable);
     }
 
-    echo "<h3>$group->name";
+    echo "<h3>$group->name<h3>";
     echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup'>";
     echo '<button>'.get_string('cleargroup', 'local_problemsection').'</button>';
     echo '</a>';
-    echo "</h3>";
 
     // Other problem sections using this group.
     $othergroupings = $DB->get_records('groupings_groups', array('groupid' => $group->id));
@@ -190,7 +189,7 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
     $addmembersurl = "groups.php?id=$courseid&psid=$psid&groupid=$psgroupinggroup->groupid";
     ?>
     <div id="addmembersform">
-        <form id="assignform" method="post" action="<?php echo $addmembersurl; ?>">
+        <form id="assignform" method="post" action="<?php echo $groupsurlstring; ?>">
         <div>
             <input type="hidden" name="sesskey" value="<?php p(sesskey()); ?>" />
             <table class="generaltable generalbox groupmanagementtable boxaligncenter" summary="">
@@ -226,19 +225,14 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
                         <?php $potentialmembersselector->display($psgrouping); ?>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3" id='backcell'>
-                        <input type="submit" name="act_cancel" value="Retour au cours" />
-                    </td>
-                </tr>
             </table>
         </div>
         </form>
     </div>
     <?php
 }
-
 $potentialmembersselector->print_user_summaries($course->id);
 $PAGE->requires->js_init_call('init_add_remove_members_page', null, false, $potentialmembersselector->get_js_module());
 
+echo "<a href='manage.php?id=$courseid'>".get_string('back')."</a>";
 echo $OUTPUT->footer();
