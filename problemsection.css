@@ -1,0 +1,83 @@
+.local_problemsection_listtab {
+    text-align:center;
+    max-width:60px;
+}
+.local_problemsection_tabicon {
+    width:60px;
+    height:60px;
+}
+.local_problemsection_thislistname {
+    font-weight:bold;
+    font-size:150%;
+    text-align:center;
+}
+.local_problemsection_otherlistname {
+    text-align:center;
+}
+.local_problemsection_categorycontent {
+    overflow:hidden;
+    position:relative
+}
+.local_problemsection_element {
+    float:left;
+    width:315px;
+    height:240px;
+    padding-right:12px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+.local_problemsection_editedelement {
+    float:left;
+    width:315px;
+    height:330px;
+    padding-right:12px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+.local_problemsection_flipflop {
+    text-align:center;
+    width:100%;
+    font-weight:bold;
+    padding:5px;
+    color:white;
+    background-color:#7F7F7F;
+    border-radius:5px 5px 0 0;
+}
+.local_problemsection_hoverlabel {
+    text-align:center;
+    width:100%;
+    font-weight:bold;
+}
+.local_problemsection_elementtable {
+    width:100%;
+}
+.local_problemsection_elementheader {
+    background-color:whitesmoke;
+    text-align:center;
+}
+.local_problemsection_iconcell {
+    width:50px;
+}
+.local_problemsection_elementicon {
+    max-width:100%;
+    height:45px;
+}
+.local_problemsection_elementtitle {
+    font-size:14;
+    font-weight:bold;
+    height:25px;
+    color:black;
+}
+.local_problemsection_hiddentitle {
+    font-size:14;
+    font-weight:bold;
+    height:25px;
+    color:#AAAAAA;
+}
+.local_problemsection_elementdescription {
+    background-color:white;
+}
+.local_problemsection_buttonline {
+    background-color:whitesmoke;
+    text-align:center;
+}
