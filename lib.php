@@ -21,8 +21,8 @@
  * 95011 Cergy-Pontoise cedex
  * FRANCE
  *
- * Adds to the course a section where the teacher can submit a problem to groups of students 
- * and give them various collaboration tools to work together on a solution. 
+ * Adds to the course a section where the teacher can submit a problem to groups of students
+ * and give them various collaboration tools to work together on a solution.
  *
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
@@ -199,7 +199,7 @@ function local_problemsection_creategroups($nbgroups, $courseid, $contextid, $gr
     $nbstudents = count($studentids);
     $nbstudentspergroup = ceil($nbstudents/$nbgroups);
     for ($groupnum = 1; $groupnum <= $nbgroups; $groupnum++) {
-        $newgroupid = local_problemsection_creategroup($courseid, $name, $groupnum, $groupingid);        
+        $newgroupid = local_problemsection_creategroup($courseid, $name, $groupnum, $groupingid);
         for ($nbstudentsingroup = 0; $nbstudentsingroup < $nbstudentspergroup; $nbstudentsingroup++) {
             if ($studentids) {
                 $studentid = array_shift($studentids);
@@ -235,11 +235,16 @@ function local_problemsection_creategroup($courseid, $name, $groupnum, $grouping
 function local_problemsection_get_studentids($contextid) {
     global $DB;
     $studentids = array();
-    $roles = $DB->get_records('role_capabilities', array('capability' => 'local/problemsection:take', 'permission' => 1));
+    $params = array('capability' => 'local/problemsection:take', 'permission' => 1);
+    $roles = $DB->get_records('role_capabilities', $params);
     foreach ($roles as $role) {
-        $roleusers = $DB->get_recordset('role_assignments', array('roleid' => $role->roleid, 'contextid' => $contextid));
+        $roleparams = array('roleid' => $role->roleid, 'contextid' => $contextid);
+        $roleusers = $DB->get_recordset('role_assignments', $roleparams);
         foreach ($roleusers as $roleuser) {
-            $studentids[] = $roleuser->userid;
+            $studentid = $roleuser->userid;
+            if ($DB->record_exists('user', array('id' => $studentid))) {
+                $studentids[] = $studentid;
+            }
         }
         $roleusers->close();
     }
