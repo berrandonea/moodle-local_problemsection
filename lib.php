@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
  * Initially developped for :
  * Université de Cergy-Pontoise
@@ -27,7 +27,7 @@
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
+ *
  * File : lib.php
  * Library functions
  */
@@ -46,8 +46,9 @@ function local_problemsection_extend_settings_navigation(settings_navigation $na
     $requiredcapabilities = array('moodle/course:update', 'local/problemsection:addinstance');
     if (has_all_capabilities($requiredcapabilities, $context)) {
         $branch = $nav->get('courseadmin');
-        $assignmodule = $DB->get_record('modules', array('name' => 'assign', 'visible' => 1)); // mod_assign must be enabled.        
-        if ($branch && $assignmodule) {            
+        // mod_assign must be enabled.
+        $assignmodule = $DB->get_record('modules', array('name' => 'assign', 'visible' => 1));
+        if ($branch && $assignmodule) {
             $params = array('id' => $COURSE->id);
             $manageurl = new moodle_url('/local/problemsection/manage.php', $params);
             $managetext = get_string('manage', 'local_problemsection');
@@ -143,7 +144,7 @@ function local_problemsection_createsection($name, $courseid, $summary) {
     $section->visible = 1;
     $section->id = $DB->insert_record('course_sections', $section);
     $courseformat = course_get_format($courseid);
-    $courseformatoptions = $courseformat->get_format_options();    
+    $courseformatoptions = $courseformat->get_format_options();
     $courseformatoptions['numsections']++;
     $courseformat->update_course_format_options(
         array('numsections' => $courseformatoptions['numsections'])
@@ -233,11 +234,11 @@ function local_problemsection_creategroup($courseid, $name, $groupnum, $grouping
  */
 function local_problemsection_get_studentids($contextid) {
     global $DB;
-    $studentids = array();    
-    $roles = $DB->get_records('role_capabilities', array('capability' => 'local/problemsection:take', 'permission' => 1));            
+    $studentids = array();
+    $roles = $DB->get_records('role_capabilities', array('capability' => 'local/problemsection:take', 'permission' => 1));
     foreach ($roles as $role) {
         $roleusers = $DB->get_recordset('role_assignments', array('roleid' => $role->roleid, 'contextid' => $contextid));
-        foreach ($roleusers as $roleuser) {            
+        foreach ($roleusers as $roleuser) {
             $studentids[] = $roleuser->userid;
         }
         $roleusers->close();
