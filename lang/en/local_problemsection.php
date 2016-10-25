@@ -21,13 +21,13 @@
  * 95011 Cergy-Pontoise cedex
  * FRANCE
  *
- * Adds to the course a section where the teacher can submit a problem to groups of students 
- * and give them various collaboration tools to work together on a solution. 
+ * Adds to the course a section where the teacher can submit a problem to groups of students
+ * and give them various collaboration tools to work together on a solution.
  *
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
+ *
  * File : lang/en/local_problemsection.php
  * English text strings.
  */

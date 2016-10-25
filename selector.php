@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
  * Initially developped for :
  * Université de Cergy-Pontoise
@@ -21,13 +21,13 @@
  * 95011 Cergy-Pontoise cedex
  * FRANCE
  *
- * Adds to the course a section where the teacher can submit a problem to groups of students 
- * and give them various collaboration tools to work together on a solution. 
+ * Adds to the course a section where the teacher can submit a problem to groups of students
+ * and give them various collaboration tools to work together on a solution.
  *
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
+ *
  * File : selector.php
  * Class for a user selector showing the students who're not members of any of this problem section's groups.
  */
@@ -95,10 +95,10 @@ class local_problemsection_nonmembers_selector extends group_non_members_selecto
      * @param string $name control name
      * @param array $options should have two elements with keys groupid and courseid.
      */
-    public function __construct($name, $options) {        
+    public function __construct($name, $options) {
         parent::__construct($name, $options);
         $this->groupingid = $options['groupingid'];
-    }   
+    }
 
     /**
      * Output user.
@@ -129,8 +129,8 @@ class local_problemsection_nonmembers_selector extends group_non_members_selecto
         }
 
         // We want to query both the current context and parent contexts.
-        list($relatedctxsql, $relatedctxparams) =
-            $DB->get_in_or_equal($context->get_parent_context_ids(true), SQL_PARAMS_NAMED, 'relatedctx');
+        list($relatedctxsql, $relatedctxparams) = $DB->get_in_or_equal($context->get_parent_context_ids(true),
+                                                                            SQL_PARAMS_NAMED, 'relatedctx');
 
         // Get the search condition.
         list($searchcondition, $searchparams) = $this->search_sql($search, 'u');
@@ -138,33 +138,34 @@ class local_problemsection_nonmembers_selector extends group_non_members_selecto
         // Build the SQL.
         list($enrolsql, $enrolparams) = get_enrolled_sql($context);
 
-        $studentids= local_problemsection_get_studentids($context->id);
+        $studentids = local_problemsection_get_studentids($context->id);
         $potentialmembers = array();
         $strstudent = get_string('potentialstudents');
         $potentialmembers[$strstudent] = array();
 
-        foreach($studentids as $studentid) {
-            $sql ="SELECT COUNT(u.id) as nbuser,u.id,u.firstname,u.lastname,u.email,CONCAT(u.firstname,u.lastname)as fullname  "
-                    . "FROM mdl_user u, mdl_groups_members gm, mdl_groupings_groups gg " 
+        foreach ($studentids as $studentid) {
+            $sql = "SELECT COUNT(u.id) AS nbuser, u.id, u.firstname, u.lastname, u.email, "
+                    . "CONCAT(u.firstname,u.lastname) AS fullname "
+                    . "FROM mdl_user u, mdl_groups_members gm, mdl_groupings_groups gg "
                     . "WHERE u.id = gm.userid AND gm.groupid = gg.groupid "
                     . "AND gg.groupingid = $this->groupingid AND u.id = $studentid";
             $user = $DB->get_record_sql($sql);
 
             // If the user is not already somewhere in this grouping, we place him in the list.
-            if(($user->nbuser) == 0) {
+            if (($user->nbuser) == 0) {
                 $potentialusermember = new stdClass();
-                $potentialusermember->id = $user->id ;
-                $potentialusermember->firstname = $user->firstname ;
-                $potentialusermember->lastname = $user->lastname ;
-                $potentialusermember->email = $user->email ;
-                $potentialusermember->fullname = $user->fullname ;
-                $potentialusermember->fullname = $user->fullname ;
+                $potentialusermember->id = $user->id;
+                $potentialusermember->firstname = $user->firstname;
+                $potentialusermember->lastname = $user->lastname;
+                $potentialusermember->email = $user->email;
+                $potentialusermember->fullname = $user->fullname;
+                $potentialusermember->fullname = $user->fullname;
                 $potentialmembers[$strstudent][$potentialusermember->id] = $potentialusermember;
             }
         }
         return $potentialmembers;
     }
-    
+
     /**
      * Output this user_selector as HTML.
      *
@@ -207,5 +208,5 @@ class local_problemsection_nonmembers_selector extends group_non_members_selecto
         $output .= $this->initialise_javascript($search);
 
         echo $output;
-    }    
+    }
 }

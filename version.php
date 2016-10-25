@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
  * Initially developped for :
  * Université de Cergy-Pontoise
@@ -21,13 +21,13 @@
  * 95011 Cergy-Pontoise cedex
  * FRANCE
  *
- * Adds to the course a section where the teacher can submit a problem to groups of students 
- * and give them various collaboration tools to work together on a solution. 
+ * Adds to the course a section where the teacher can submit a problem to groups of students
+ * and give them various collaboration tools to work together on a solution.
  *
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
+ *
  * File : version.php
  * Version number
  */
@@ -36,6 +36,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component  = 'local_problemsection';
 $plugin->release    = '0.1';
-$plugin->version    = 2016102500;
+$plugin->version    = 2016102501;
 $plugin->requires   = 2014022000;
 $plugin->maturity   = MATURITY_STABLE;

@@ -21,13 +21,13 @@
  * 95011 Cergy-Pontoise cedex
  * FRANCE
  *
- * Adds to the course a section where the teacher can submit a problem to groups of students 
- * and give them various collaboration tools to work together on a solution. 
+ * Adds to the course a section where the teacher can submit a problem to groups of students
+ * and give them various collaboration tools to work together on a solution.
  *
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
+ *
  * File : manage.php
  * To manage the problem sections in this course.
  */
@@ -49,7 +49,7 @@ require_capability('local/problemsection:addinstance', $context);
 // Header code.
 $manageurl = new moodle_url('/local/problemsection/manage.php', array('id' => $courseid));
 if ($deletedproblemsectionid) {
-    $pageurl = new moodle_url('/local/problemsection/manage.php', 
+    $pageurl = new moodle_url('/local/problemsection/manage.php',
             array('id' => $courseid, 'delete' => $deletedproblemsectionid));
 } else {
     $pageurl = $manageurl;
@@ -60,7 +60,6 @@ $PAGE->set_course($course);
 $title = get_string('manage', 'local_problemsection');
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
-//$PAGE->requires->css('problemsection.css');
 
 // Deleting the problem section.
 if ($deletedproblemsectionid) {
@@ -130,7 +129,7 @@ if ($problemsections) {
         echo "<td><a href='".$commondeleteurl.$problemsection->id."'><button>".get_string('delete')."</button></a></td>";
         echo '</tr>';
     }
-    echo '</table>';    
+    echo '</table>';
 } else {
     echo '<p>'.get_string('noproblemyet', 'local_problemsection').'</p>';
 }

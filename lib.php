@@ -46,7 +46,7 @@ function local_problemsection_extend_settings_navigation(settings_navigation $na
     $requiredcapabilities = array('moodle/course:update', 'local/problemsection:addinstance');
     if (has_all_capabilities($requiredcapabilities, $context)) {
         $branch = $nav->get('courseadmin');
-        // mod_assign must be enabled.
+        // Core plugin mod_assign must be enabled.
         $assignmodule = $DB->get_record('modules', array('name' => 'assign', 'visible' => 1));
         if ($branch && $assignmodule) {
             $params = array('id' => $COURSE->id);
@@ -56,11 +56,6 @@ function local_problemsection_extend_settings_navigation(settings_navigation $na
             $branch->add($managetext, $manageurl, $nav::TYPE_CONTAINER, null, null, $icon);
         }
     }
-}
-
-function local_problemsection_groupmethods() {
-    $methods = array('nbgroups', /*'usenbstudents',*/ 'copygrouping');
-    return $methods;
 }
 
 /**
@@ -197,7 +192,7 @@ function local_problemsection_creategroups($nbgroups, $courseid, $contextid, $gr
     $studentids = local_problemsection_get_studentids($contextid);
     shuffle($studentids);
     $nbstudents = count($studentids);
-    $nbstudentspergroup = ceil($nbstudents/$nbgroups);
+    $nbstudentspergroup = ceil($nbstudents / $nbgroups);
     for ($groupnum = 1; $groupnum <= $nbgroups; $groupnum++) {
         $newgroupid = local_problemsection_creategroup($courseid, $name, $groupnum, $groupingid);
         for ($nbstudentsingroup = 0; $nbstudentsingroup < $nbstudentspergroup; $nbstudentsingroup++) {
@@ -268,7 +263,7 @@ function local_problemsection_createmodules($section, $groupingid, $data) {
     $assigncmid = local_problemsection_createassign($section, $groupingid, $data);
     $sequence = $assigncmid;
     $potentialtools = local_problemsection_potentialtools();
-    foreach($potentialtools as $tool) {
+    foreach ($potentialtools as $tool) {
         if (isset($data->$tool)) {
             if ($data->$tool) {
                 $toolcmid = local_problemsection_createtool($tool, $data, $section, $groupingid);

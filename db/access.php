@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
  * Initially developped for :
  * Université de Cergy-Pontoise
@@ -21,8 +21,8 @@
  * 95011 Cergy-Pontoise cedex
  * FRANCE
  *
- * Adds to the course a section where the teacher can submit a problem to groups of students 
- * and give them various collaboration tools to work together on a solution. 
+ * Adds to the course a section where the teacher can submit a problem to groups of students
+ * and give them various collaboration tools to work together on a solution.
  *
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
@@ -53,7 +53,7 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
         ),
-    ),    
+    ),
 
     'local/problemsection:take' => array (
         'captype' => 'write',

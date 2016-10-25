@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
  * Initially developped for :
  * Université de Cergy-Pontoise
@@ -21,13 +21,13 @@
  * 95011 Cergy-Pontoise cedex
  * FRANCE
  *
- * Adds to the course a section where the teacher can submit a problem to groups of students 
- * and give them various collaboration tools to work together on a solution. 
+ * Adds to the course a section where the teacher can submit a problem to groups of students
+ * and give them various collaboration tools to work together on a solution.
  *
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
+ *
  * File : problemsection.php
  * To create a problem section
  */
@@ -57,10 +57,7 @@ $PAGE->navbar->add(get_string('manage', 'local_problemsection'), new moodle_url(
 $PAGE->navbar->add(get_string('problemsection:addinstance', 'local_problemsection'), new moodle_url($pageurl));
 
 
-// Gather all needed data for the form.
-//$students = local_problemsection_get_studentids($context->id);
-//$nbusers = count($students);
-$enabledmods = $DB->get_records('modules', array('visible' => 1));
+// Prepare datas for the form.
 $potentialtools = local_problemsection_potentialtools();
 $tools = array();
 foreach ($potentialtools as $potentialtool) {
@@ -71,30 +68,19 @@ foreach ($potentialtools as $potentialtool) {
         }
     }
 }
-//$methods = local_problemsection_groupmethods();
-//$methodoptions = array();
-//foreach ($methods as $method) {
-//    $methodoptions[$method] = get_string($method, 'local_problemsection');
-//}
 $coursegroupings = $DB->get_records('groupings', array('courseid' => $courseid));
 $groupingoptions = array();
 $groupingoptions[0] = ' - ';
-foreach($coursegroupings as $coursegrouping) {
+foreach ($coursegroupings as $coursegrouping) {
     $groupingoptions[$coursegrouping->id] = $coursegrouping->name;
 }
-//$nboptions = array_combine(range(1, $nbusers), range(1, $nbusers));
 
 // Form instanciation.
-$customdatas = array('courseid' => $courseid,
-              //'nbusers' => $nbusers,
-              'tools' => $tools,
-              'copygrouping' => $groupingoptions,
-              //'nbgroups' => $nboptions
-        );
+$customdatas = array('courseid' => $courseid, 'tools' => $tools, 'copygrouping' => $groupingoptions);
 $mform = new problemsection_form($pageurl, $customdatas);
 
 // Three possible states.
-if($mform->is_cancelled()) {    
+if ($mform->is_cancelled()) {
     $courseurl = new moodle_url('/course/view.php', array('id' => $courseid));
     redirect($courseurl);
 } else if ($submitteddata = $mform->get_data()) {

@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
  * Initially developped for :
  * Université de Cergy-Pontoise
@@ -21,13 +21,13 @@
  * 95011 Cergy-Pontoise cedex
  * FRANCE
  *
- * Adds to the course a section where the teacher can submit a problem to groups of students 
- * and give them various collaboration tools to work together on a solution. 
+ * Adds to the course a section where the teacher can submit a problem to groups of students
+ * and give them various collaboration tools to work together on a solution.
  *
  * @package   local_problemsection
  * @copyright 2016 Brice Errandonea <brice.errandonea@u-cergy.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
+ *
  * File : groups.php
  * Manage groups for this problem section.
  */
@@ -45,7 +45,7 @@ $action = optional_param('action', '', PARAM_ALPHA);
 $groupsurl = new moodle_url('/local/problemsection/groups.php', array('id' => $courseid, 'psid' => $psid));
 $groupsurlstring = "$CFG->wwwroot/local/problemsection/groups.php?id=$courseid&psid=$psid";
 
-$course = $DB->get_record('course', array('id'=>$courseid));
+$course = $DB->get_record('course', array('id' => $courseid));
 $PAGE->set_pagelayout('admin');
 require_login($course);
 $context = context_course::instance($course->id);
@@ -65,8 +65,8 @@ $psgrouping = $DB->get_record('groupings', array('id' => $problemsection->groupi
 $psgroupinggroups = $DB->get_records('groupings_groups', array('groupingid' => $psgrouping->id));
 $nbpsgroups = count($psgroupinggroups);
 switch ($action) {
-    case 'cleanallmembers':        
-        foreach($psgroupinggroups as $psgroupinggroup){
+    case 'cleanallmembers':
+        foreach ($psgroupinggroups as $psgroupinggroup) {
             $DB->delete_records('groups_members', array('groupid' => $psgroupinggroup->groupid));
         }
         reset($psgroupinggroups);
@@ -82,8 +82,8 @@ switch ($action) {
         break;
 
     case 'cleargroup':
-        $DB->delete_records('groups_members',array('groupid'=>$paramgroupid));
-        break;    
+        $DB->delete_records('groups_members', array('groupid' => $paramgroupid));
+        break;
 
     default: // ERROR.
         print_error('unknowaction', '', $groupsurl);
@@ -107,7 +107,7 @@ echo "<input type='submit' style='width:200px' value='".get_string('creategroup'
 echo "</a>";
 echo "</div>";
 
-foreach($psgroupinggroups as $psgroupinggroup){
+foreach ($psgroupinggroups as $psgroupinggroup) {
     $group = $DB->get_record('groups', array('id' => $psgroupinggroup->groupid));
     if (!$group) {
         continue;
@@ -142,9 +142,6 @@ foreach($psgroupinggroups as $psgroupinggroup){
                 if (!groups_remove_member($group->id, $user->id)) {
                     print_error('erroraddremoveuser', 'group', $returnurl);
                 }
-//                else {
-//                    header("Location: groups.php?id=$courseid&psid=$psid");
-//                }
                 $groupmembersselector->invalidate_selected_users();
                 $potentialmembersselector->invalidate_selected_users();
             }
@@ -176,7 +173,7 @@ foreach($psgroupinggroups as $psgroupinggroup){
     echo '</a>';
     echo "</h3>";
 
-    // Other problem sections using this group
+    // Other problem sections using this group.
     $othergroupings = $DB->get_records('groupings_groups', array('groupid' => $group->id));
     if (count($othergroupings) > 1) {
         echo get_string('sharedgroup', 'local_problemsection').'<ul>';
@@ -189,7 +186,7 @@ foreach($psgroupinggroups as $psgroupinggroup){
         echo '</ul>'.get_string('sharedchanges', 'local_problemsection').'<br><br>';
     }
 
-    /// Print the editing form
+    // Print the editing form.
     $addmembersurl = "groups.php?id=$courseid&psid=$psid&groupid=$psgroupinggroup->groupid";
     ?>
     <div id="addmembersform">
@@ -201,7 +198,7 @@ foreach($psgroupinggroups as $psgroupinggroup){
                     <td id='existingcell'>
                         <p>
                             <label for="removeselect">
-                                <?php 
+                                <?php
                                 print_string('groupmembers', 'group');
                                 echo ' '.$group->name;
                                 ?>
@@ -219,7 +216,7 @@ foreach($psgroupinggroups as $psgroupinggroup){
                             <input name="remove" id="remove" type="submit" style="width:200px"
                                    value="<?php echo get_string('remove').'&nbsp;'.$OUTPUT->rarrow(); ?>"
                                    title="<?php print_string('remove'); ?>"
-                            />                            
+                            />
                         </p>
                     </td>
                     <td id='potentialcell'>
@@ -227,7 +224,7 @@ foreach($psgroupinggroups as $psgroupinggroup){
                             <label for="addselect"><?php print_string('potentialmembs', 'group'); ?></label>
                         </p>
                         <?php $potentialmembersselector->display($psgrouping); ?>
-                    </td>              
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="3" id='backcell'>
@@ -241,10 +238,7 @@ foreach($psgroupinggroups as $psgroupinggroup){
     <?php
 }
 
-//outputs the JS array used to display the other groups users are in
 $potentialmembersselector->print_user_summaries($course->id);
-
-//this must be after calling display() on the selectors so their setup JS executes first
 $PAGE->requires->js_init_call('init_add_remove_members_page', null, false, $potentialmembersselector->get_js_module());
 
 echo $OUTPUT->footer();
