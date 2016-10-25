@@ -326,7 +326,7 @@ function local_problemsection_createassign($section, $groupingid, $data) {
  * @param type $groupingid
  * @return type
  */
-function local_problemsection_createtool($tool, $data, $sectionid, $groupingid) {
+function local_problemsection_createtool($tool, $data, $section, $groupingid) {
     global $DB;
     $now = time();
     $instance = new stdClass();
@@ -341,7 +341,7 @@ function local_problemsection_createtool($tool, $data, $sectionid, $groupingid) 
     $cm->course = $data->courseid;
     $cm->module = $module->id;
     $cm->instance = $instance->id;
-    $cm->section = $sectionid;
+    $cm->section = $section->id;
     $cm->added = $now;
     $cm->visible = 1;
     $cm->visibleold = 1;
