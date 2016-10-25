@@ -167,7 +167,7 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
         echo html_writer::table($groupinfotable);
     }
 
-    echo "<h3>$group->name<h3>";
+    echo "<h3>$group->name</h3>";
     echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup'>";
     echo '<button>'.get_string('cleargroup', 'local_problemsection').'</button>';
     echo '</a>';
@@ -234,5 +234,5 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
 $potentialmembersselector->print_user_summaries($course->id);
 $PAGE->requires->js_init_call('init_add_remove_members_page', null, false, $potentialmembersselector->get_js_module());
 
-echo "<a href='manage.php?id=$courseid'>".get_string('back')."</a>";
+echo "<a href='manage.php?id=$courseid'><button>".get_string('back')."</button></a>";
 echo $OUTPUT->footer();
