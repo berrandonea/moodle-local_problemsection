@@ -107,6 +107,7 @@ if ($deletedproblemsectionid) {
 $problemsections = $DB->get_records('local_problemsection', array('courseid' => $courseid));
 $addurl = "problemsection.php?id=$courseid";
 $commongroupsurl = "groups.php?id=$courseid&psid=";
+$commonsubmissionsurl = "$CFG->wwwroot/mod/assign/view.php?action=grading&id=";
 $commondeleteurl = "manage.php?id=$courseid&delete=";
 echo $OUTPUT->header();
 echo "<a href='$addurl'><button>".get_string('problemsection:addinstance', 'local_problemsection')."</button></a>";
@@ -115,15 +116,26 @@ if ($problemsections) {
     echo '<tr>';
     echo '<th>'.get_string('name').'</th>';
     echo '<th>'.get_string('groups').'</th>';
+    echo '<th>'.get_string('submissions', 'local_problemsection').'</th>';
     echo '<th>'.get_string('allowsubmissionsfromdate', 'assign').'</th>';
     echo '<th>'.get_string('duedate', 'assign').'</th>';
     echo '<th>'.get_string('delete').'</th>';
     echo '</tr>';
     foreach ($problemsections as $problemsection) {
+        $nbgroups = $DB->count_records('groupings_groups',
+                array('groupingid' => $problemsection->groupingid));
         $groupsurl = $commongroupsurl.$problemsection->id;
+        $assigncm = local_problemsection_get_assigncm($problemsection);
         echo '<tr>';
         echo "<td>$problemsection->name</td>";
-        echo "<td><a href='$groupsurl'><button>".get_string('managegroups', 'local_problemsection')."</button></a></td>";
+        echo "<td><a href='$groupsurl'>$nbgroups</a></td>";
+        if ($assigncm) {
+            $submissionsurl = $commonsubmissionsurl.$assigncm->id;
+            $nbsubmissions = $DB->count_records('assign_submission', array('assignment' => $assigncm->instance));
+            echo "<td><a href='$submissionsurl'>$nbsubmissions</a></td>";
+        } else {
+            echo '<td></td>';
+        }
         echo '<td>'.date('d/m/Y H:i:s', $problemsection->datefrom).'</td>';
         echo '<td>'.date('d/m/Y H:i:s', $problemsection->dateto).'</td>';
         echo "<td><a href='".$commondeleteurl.$problemsection->id."'><button>".get_string('delete')."</button></a></td>";
@@ -133,4 +145,5 @@ if ($problemsections) {
 } else {
     echo '<p>'.get_string('noproblemyet', 'local_problemsection').'</p>';
 }
+echo "<a href='$CFG->wwwroot/course/view.php?id=$courseid'><button>".get_string('back')."</button></a>";
 echo $OUTPUT->footer();

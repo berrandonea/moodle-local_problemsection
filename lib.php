@@ -59,10 +59,23 @@ function local_problemsection_extend_settings_navigation(settings_navigation $na
 }
 
 /**
+ * Returns the assign course_modules record for this problem section.
+ * @global object $DB
+ * @param object $problemsection
+ * @return object
+ */
+function local_problemsection_get_assigncm($problemsection) {
+    global $DB;
+    $sequence = explode(',', $problemsection->sequence);
+    $assigncm = $DB->get_record('course_modules', array('id' => $sequence[0]));
+    return $assigncm;
+}
+
+/**
  * Creates the groups or uses those of the mentionned grouping.
  * @param object $data The submitted datas.
- * @param type $context The current course context.
- * @param type $groupingid This problemsection's grouping.
+ * @param context $context The current course context.
+ * @param int $groupingid This problemsection's grouping.
  */
 function local_problemsection_addgroups($data, $context, $groupingid) {
     if ($data->copygrouping) {

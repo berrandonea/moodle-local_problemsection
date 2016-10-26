@@ -58,3 +58,4 @@ $string['summary'] = 'Résumé';
 $string['summary_help'] = 'Une courte présentation du problème. Elle sera affichée sur la page du cours, juste en dessous du titre de la section.';
 $string['directions'] = 'Consignes';
 $string['directions_help'] = 'Expliquez à vos étudiants ce qu\'ils doivent faire. Cela s\'affichera à l\'intérieur de l\'activité Devoir.';
+$string['submissions'] = 'Travaux remis';

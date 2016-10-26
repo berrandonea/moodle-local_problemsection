@@ -54,3 +54,4 @@ $string['summary'] = 'Summary';
 $string['summary_help'] = 'A brief text presenting the problem section. It will be displayed on the course page, just after the section title.';
 $string['directions'] = 'Directions';
 $string['directions_help'] = 'Explain your students what they have to do. This will be displayed inside the Assign activity.';
+$string['submissions'] = 'Submissions';
