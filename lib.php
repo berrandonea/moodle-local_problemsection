@@ -162,15 +162,12 @@ function local_problemsection_createsection($name, $courseid, $summary) {
 
 /**
  * Creates a new grouping for this problem.
- * @global object $DB
  * @param string $name
  * @param int $courseid
  * @param int $sectionid
  * @return int
  */
 function local_problemsection_creategrouping($name, $courseid) {
-    global $DB;
-    $now = time();
     $grouping = new stdClass();
     $grouping->courseid = $courseid;
     $grouping->name = $name;
