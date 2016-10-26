@@ -186,7 +186,7 @@ function local_problemsection_copygrouping($copiedgroupingid, $pastedgroupingid)
     global $DB;
     $copiedgroups = $DB->get_records('groupings_groups', array('groupingid' => $copiedgroupingid));
     foreach ($copiedgroups as $copiedgroup) {
-        groups_assign_grouping($pastedgroupingid, $copiedgroup->id);
+        groups_assign_grouping($pastedgroupingid, $copiedgroup->groupid);
     }
 }
 

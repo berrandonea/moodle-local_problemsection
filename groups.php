@@ -168,11 +168,9 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
     }
 
     echo "<h3>$group->name</h3>";
-    echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup'>";
-    echo '<button>'.get_string('cleargroup', 'local_problemsection').'</button>';
-    echo '</a>';
-
+    echo '<table><tr>';
     // Other problem sections using this group.
+    echo '<td>';
     $othergroupings = $DB->get_records('groupings_groups', array('groupid' => $group->id));
     if (count($othergroupings) > 1) {
         echo get_string('sharedgroup', 'local_problemsection').'<ul>';
@@ -184,6 +182,13 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
         }
         echo '</ul>'.get_string('sharedchanges', 'local_problemsection').'<br><br>';
     }
+    echo '</td>';
+    echo '<td>';
+    echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup'>";
+    echo '<button>'.get_string('cleargroup', 'local_problemsection').'</button>';
+    echo '</a>';
+    echo '</td>';
+    echo '</tr></table>';
 
     // Print the editing form.
     $addmembersurl = "groups.php?id=$courseid&psid=$psid&groupid=$psgroupinggroup->groupid";
