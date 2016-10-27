@@ -109,11 +109,7 @@ function local_problemsection_create($data) {
     $problemsection->sectionid = $section->id;
     $problemsection->groupingid = $groupingid;
     $problemsection->name = $data->name;
-    $problemsection->theproblem = $data->theproblem['text'];
-    $problemsection->expectation = $data->expectation['text'];
     $problemsection->sequence = $sequence;
-    $problemsection->datefrom = $data->datefrom;
-    $problemsection->dateto = $data->dateto;
     $problemsection->id = $DB->insert_record('local_problemsection', $problemsection);
     return $problemsection->id;
 }

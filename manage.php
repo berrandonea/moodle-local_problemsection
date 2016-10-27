@@ -131,13 +131,14 @@ if ($problemsections) {
         echo "<td style='text-align:center'><a href='$groupsurl'>$nbgroups</a></td>";
         if ($assigncm) {
             $submissionsurl = $commonsubmissionsurl.$assigncm->id;
-            $nbsubmissions = $DB->count_records('assign_submission', array('assignment' => $assigncm->instance));
+            $assign = $DB->get_record('assign', array('id' => $assigncm->instance));
+            $nbsubmissions = $DB->count_records('assign_submission', array('assignment' => $assign->id));
             echo "<td style='text-align:center'><a href='$submissionsurl'>$nbsubmissions</a></td>";
+            echo '<td>'.date('d/m/Y H:i:s', $assign->allowsubmissionsfromdate).'</td>';
+            echo '<td>'.date('d/m/Y H:i:s', $assign->duedate).'</td>';
         } else {
-            echo '<td></td>';
+            echo '<td></td><td></td><td></td>';
         }
-        echo '<td>'.date('d/m/Y H:i:s', $problemsection->datefrom).'</td>';
-        echo '<td>'.date('d/m/Y H:i:s', $problemsection->dateto).'</td>';
         echo "<td><a href='".$commondeleteurl.$problemsection->id."'><button>".get_string('delete')."</button></a></td>";
         echo '</tr>';
     }
