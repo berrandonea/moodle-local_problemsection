@@ -41,6 +41,7 @@ $psid = required_param('psid', PARAM_INT);
 $courseid = required_param('id', PARAM_INT);
 $paramgroupid = optional_param('groupid', 0, PARAM_INT);
 $action = optional_param('action', '', PARAM_ALPHA);
+$changedgroupid = optional_param('changed', 0, PARAM_INT);
 
 $groupsurl = new moodle_url('/local/problemsection/groups.php', array('id' => $courseid, 'psid' => $psid));
 $groupsurlstring = "$CFG->wwwroot/local/problemsection/groups.php?id=$courseid&psid=$psid";
@@ -119,16 +120,19 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
                                                                                                 'courseid' => $course->id));
 
     if (optional_param('add', false, PARAM_BOOL) && confirm_sesskey()) {
-        $userstoadd = $potentialmembersselector->get_selected_users();
-        if (!empty($userstoadd)) {
-            foreach ($userstoadd as $user) {
-                if (!groups_add_member($group->id, $user->id)) {
-                    print_error('erroraddremoveuser', 'group', $returnurl);
+        if ($changedgroupid == $group->id) {
+            $userstoadd = $potentialmembersselector->get_selected_users();
+            if (!empty($userstoadd)) {
+                foreach ($userstoadd as $user) {
+                    if (!groups_add_member($group->id, $user->id)) {
+                        print_error('erroraddremoveuser', 'group', $returnurl);
+                    }
+                    $addedusersid[] = $user->id;
+                    $groupmembersselector->invalidate_selected_users();
                 }
-                $groupmembersselector->invalidate_selected_users();
-                $potentialmembersselector->invalidate_selected_users();
             }
         }
+        $potentialmembersselector->invalidate_selected_users();
     }
 
     if (optional_param('remove', false, PARAM_BOOL) && confirm_sesskey()) {
@@ -142,11 +146,24 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
                 if (!groups_remove_member($group->id, $user->id)) {
                     print_error('erroraddremoveuser', 'group', $returnurl);
                 }
+                $removedusersid[] = $user->id;
                 $groupmembersselector->invalidate_selected_users();
                 $potentialmembersselector->invalidate_selected_users();
             }
         }
     }
+}
+
+foreach ($psgroupinggroups as $psgroupinggroup) {
+    $group = $DB->get_record('groups', array('id' => $psgroupinggroup->groupid));
+    if (!$group) {
+        continue;
+    }
+    $groupmembersselector = new local_problemsection_members_selector('removeselect', array('groupid' => $group->id,
+                                                                                            'courseid' => $course->id));
+    $potentialmembersselector = new local_problemsection_nonmembers_selector('addselect', array('groupid' => $group->id,
+                                                                                                'groupingid' => $psgrouping->id,
+                                                                                                'courseid' => $course->id));
 
     // Store the rows we want to display in the group info.
     $groupinforow = array();
@@ -197,6 +214,7 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
         <form id="assignform" method="post" action="<?php echo $groupsurlstring; ?>">
         <div>
             <input type="hidden" name="sesskey" value="<?php p(sesskey()); ?>" />
+            <input type="hidden" name="changed" value="<?php echo $group->id; ?>" />
             <table class="generaltable generalbox groupmanagementtable boxaligncenter" summary="">
                 <tr>
                     <td id='existingcell'>
@@ -236,8 +254,9 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
     </div>
     <?php
 }
+echo "<a href='manage.php?id=$courseid'><button>".get_string('back')."</button></a>";
+
 $potentialmembersselector->print_user_summaries($course->id);
 $PAGE->requires->js_init_call('init_add_remove_members_page', null, false, $potentialmembersselector->get_js_module());
 
-echo "<a href='manage.php?id=$courseid'><button>".get_string('back')."</button></a>";
 echo $OUTPUT->footer();
