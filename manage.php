@@ -62,7 +62,7 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
 // Deleting the problem section.
-if ($deletedproblemsectionid) {
+if ($deletedproblemsectionid && confirm_sesskey()) {
     $deletionparams = array('id' => $deletedproblemsectionid, 'courseid' => $courseid);
     $deletedproblemsection = $DB->get_record('local_problemsection', $deletionparams);
     if ($deletedproblemsection) {
@@ -74,7 +74,7 @@ if ($deletedproblemsectionid) {
         if (course_can_delete_section($course, $sectioninfo)) {
             $confirm = optional_param('confirm', false, PARAM_BOOL) && confirm_sesskey();
             if ($confirm) {
-                local_problemsection_delete($problemsection, $course, $sectioninfo);
+                local_problemsection_delete($deletedproblemsection, $course, $sectioninfo);
                 redirect($manageurl);
             } else {
                 if (get_string_manager()->string_exists('deletesection', 'format_' . $course->format)) {
@@ -108,7 +108,7 @@ $problemsections = $DB->get_records('local_problemsection', array('courseid' => 
 $addurl = "problemsection.php?id=$courseid";
 $commongroupsurl = "groups.php?id=$courseid&psid=";
 $commonsubmissionsurl = "$CFG->wwwroot/mod/assign/view.php?action=grading&id=";
-$commondeleteurl = "manage.php?id=$courseid&delete=";
+$commondeleteurl = "manage.php?id=$courseid&sesskey=".s(sesskey())."&delete=";
 echo $OUTPUT->header();
 echo "<a href='$addurl'><button>".get_string('problemsection:addinstance', 'local_problemsection')."</button></a>";
 if ($problemsections) {

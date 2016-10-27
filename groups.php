@@ -99,10 +99,10 @@ $PAGE->navbar->add(get_string('managegroups', 'local_problemsection'), $groupsur
 
 echo $OUTPUT->header();
 echo "<div style='text-align:center'>";
-echo "<a href='$groupsurlstring&action=cleanallmembers&sesskey=".sesskey()."'>";
+echo "<a href='$groupsurlstring&action=cleanallmembers&sesskey=".s(sesskey())."'>";
 echo "<input type='submit' style='width:200px' value='".get_string('clearallgroups', 'local_problemsection')."' />";
 echo "</a>";
-echo "<a href='$groupsurlstring&action=creategroup&sesskey=".sesskey()."'>";
+echo "<a href='$groupsurlstring&action=creategroup&sesskey=".s(sesskey())."'>";
 echo "<input type='submit' style='width:200px' value='".get_string('creategroup', 'local_problemsection')."' />";
 echo "</a>";
 echo "</div>";
@@ -122,7 +122,7 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
         $userstoadd = $potentialmembersselector->get_selected_users();
         if (!empty($userstoadd)) {
             foreach ($userstoadd as $user) {
-                if (!groups_add_member($paramgroupid, $user->id)) {
+                if (!groups_add_member($group->id, $user->id)) {
                     print_error('erroraddremoveuser', 'group', $returnurl);
                 }
                 $groupmembersselector->invalidate_selected_users();
@@ -184,7 +184,7 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
     }
     echo '</td>';
     echo '<td>';
-    echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup&sesskey=".sesskey()."'>";
+    echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup&sesskey=".s(sesskey())."'>";
     echo '<button>'.get_string('cleargroup', 'local_problemsection').'</button>';
     echo '</a>';
     echo '</td>';
