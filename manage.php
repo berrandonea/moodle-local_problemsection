@@ -128,11 +128,11 @@ if ($problemsections) {
         $assigncm = local_problemsection_get_assigncm($problemsection);
         echo '<tr>';
         echo "<td>$problemsection->name</td>";
-        echo "<td><a href='$groupsurl'>$nbgroups</a></td>";
+        echo "<td style='text-align:center'><a href='$groupsurl'>$nbgroups</a></td>";
         if ($assigncm) {
             $submissionsurl = $commonsubmissionsurl.$assigncm->id;
             $nbsubmissions = $DB->count_records('assign_submission', array('assignment' => $assigncm->instance));
-            echo "<td><a href='$submissionsurl'>$nbsubmissions</a></td>";
+            echo "<td style='text-align:center'><a href='$submissionsurl'>$nbsubmissions</a></td>";
         } else {
             echo '<td></td>';
         }
