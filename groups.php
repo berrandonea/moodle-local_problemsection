@@ -64,30 +64,30 @@ $problemsection = $DB->get_record('local_problemsection', array('id' => $psid), 
 $psgrouping = $DB->get_record('groupings', array('id' => $problemsection->groupingid));
 $psgroupinggroups = $DB->get_records('groupings_groups', array('groupingid' => $psgrouping->id));
 $nbpsgroups = count($psgroupinggroups);
-switch ($action) {
-    case 'cleanallmembers':
-        foreach ($psgroupinggroups as $psgroupinggroup) {
-            $DB->delete_records('groups_members', array('groupid' => $psgroupinggroup->groupid));
-        }
-        reset($psgroupinggroups);
-        break;
 
-    case false:
-        break;
+if ($action && confirm_sesskey()) {
+    switch ($action) {
+        case 'cleanallmembers':
+            foreach ($psgroupinggroups as $psgroupinggroup) {
+                $DB->delete_records('groups_members', array('groupid' => $psgroupinggroup->groupid));
+            }
+            reset($psgroupinggroups);
+            break;
 
-    case 'creategroup':
-        $nbpsgroups++;
-        $newgroupid = local_problemsection_creategroup($courseid, $problemsection->name, $nbpsgroups, $psgrouping->id);
-        header("Location: $groupsurlstring");
-        break;
+        case 'creategroup':
+            $nbpsgroups++;
+            $newgroupid = local_problemsection_creategroup($courseid, $problemsection->name, $nbpsgroups, $psgrouping->id);
+            header("Location: $groupsurlstring");
+            break;
 
-    case 'cleargroup':
-        $DB->delete_records('groups_members', array('groupid' => $paramgroupid));
-        break;
+        case 'cleargroup':
+            $DB->delete_records('groups_members', array('groupid' => $paramgroupid));
+            break;
 
-    default: // ERROR.
-        print_error('unknowaction', '', $groupsurl);
-        break;
+        default: // ERROR.
+            print_error('unknowaction', '', $groupsurl);
+            break;
+    }
 }
 
 $pagetitle = "$problemsection->name : $strgroups";
@@ -99,10 +99,10 @@ $PAGE->navbar->add(get_string('managegroups', 'local_problemsection'), $groupsur
 
 echo $OUTPUT->header();
 echo "<div style='text-align:center'>";
-echo "<a href='$groupsurlstring&action=cleanallmembers'>";
+echo "<a href='$groupsurlstring&action=cleanallmembers&sesskey=".sesskey()."'>";
 echo "<input type='submit' style='width:200px' value='".get_string('clearallgroups', 'local_problemsection')."' />";
 echo "</a>";
-echo "<a href='$groupsurlstring&action=creategroup'>";
+echo "<a href='$groupsurlstring&action=creategroup&sesskey=".sesskey()."'>";
 echo "<input type='submit' style='width:200px' value='".get_string('creategroup', 'local_problemsection')."' />";
 echo "</a>";
 echo "</div>";
@@ -184,7 +184,7 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
     }
     echo '</td>';
     echo '<td>';
-    echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup'>";
+    echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup&sesskey=".sesskey()."'>";
     echo '<button>'.get_string('cleargroup', 'local_problemsection').'</button>';
     echo '</a>';
     echo '</td>';
