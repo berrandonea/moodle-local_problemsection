@@ -253,7 +253,7 @@ function local_problemsection_get_studentids($contextid) {
 }
 
 function local_problemsection_potentialtools() {
-    $potentialtools = array('chat', 'forum', 'depotetudiant', 'etherpadlite', 'wiki');
+    $potentialtools = array('chat', 'forum', 'depotetudiant', 'etherpadlite', 'publication', 'wiki');
     return $potentialtools;
 }
 
@@ -334,7 +334,10 @@ function local_problemsection_createtool($tool, $data, $section, $groupingid) {
     $instance->course = $data->courseid;
     $instance->name = get_string('pluginname', "mod_$tool");
     $instance->intro = get_string('pleaseuse', 'local_problemsection').' '.$data->name;
-    $instance->introformat = 1;
+    $instance->introformat = FORMAT_HTML;
+    if ($tool == 'publication') {
+        $instance->obtainteacherapproval = 1; // In mod_publication, 1 means no teacher approval needed.
+    }
     $instance->id = $DB->insert_record($tool, $instance);
     $module = $DB->get_record('modules', array('name' => $tool));
     $cm = new stdClass();
