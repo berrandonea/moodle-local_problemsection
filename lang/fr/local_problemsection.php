@@ -59,3 +59,5 @@ $string['summary_help'] = 'Une courte présentation du problème. Elle sera affi
 $string['directions'] = 'Consignes';
 $string['directions_help'] = 'Expliquez à vos étudiants ce qu\'ils doivent faire. Cela s\'affichera à l\'intérieur de l\'activité Devoir.';
 $string['submissions'] = 'Travaux remis';
+$string['potentialtools'] = 'Outils de communication potentiels';
+$string['choosepotentialtools'] = 'Cochez les outils de communication parmi lesquels un enseignant pourra choisir lors de la création d\'une section problème. Evitez d\'en mettre trop.';

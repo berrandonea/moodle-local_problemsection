@@ -252,8 +252,21 @@ function local_problemsection_get_studentids($contextid) {
     return $studentids;
 }
 
+/**
+ * Get the list of communication tools a teacher can choose from when creating a problem section.
+ * @global object $DB
+ * @return array of strings
+ */
 function local_problemsection_potentialtools() {
-    $potentialtools = array('chat', 'forum', 'depotetudiant', 'etherpadlite', 'publication', 'wiki');
+    global $DB;
+    $potentialtools = array();
+    $enabledmods = $DB->get_records('modules', array('visible' => 1));
+    foreach ($enabledmods as $mod) {
+        $showmod = get_config('local_problemsection', $mod->name);
+        if ($showmod) {
+            $potentialtools[] = $mod->name;
+        }
+    }
     return $potentialtools;
 }
 

@@ -55,3 +55,5 @@ $string['summary_help'] = 'A brief text presenting the problem section. It will 
 $string['directions'] = 'Directions';
 $string['directions_help'] = 'Explain your students what they have to do. This will be displayed inside the Assign activity.';
 $string['submissions'] = 'Submissions';
+$string['potentialtools'] = 'Potential communication tools';
+$string['choosepotentialtools'] = 'Please check the communication tools a teacher will choose from when creating a problem section. They should not be too numerous.';
