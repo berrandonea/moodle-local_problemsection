@@ -48,7 +48,10 @@ if ($hassiteconfig) {
         } else {
             $defaultcheck = false;
         }
-        $modcheckbox = new admin_setting_configcheckbox("local_problemsection/$mod->name", get_string('pluginname', "mod_$mod->name"), '', $defaultcheck);
+        $modcheckbox = new admin_setting_configcheckbox("local_problemsection/$mod->name",
+                                                        get_string('pluginname',
+                                                        "mod_$mod->name"),
+                                                        '', $defaultcheck);
         $settings->add($modcheckbox);
     }
     $ADMIN->add('localplugins', $settings);
