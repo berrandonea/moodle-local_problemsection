@@ -56,9 +56,8 @@ $PAGE->set_heading($title);
 $PAGE->navbar->add(get_string('manage', 'local_problemsection'), new moodle_url("/local/problemsection/manage.php?id=$courseid"));
 $PAGE->navbar->add(get_string('problemsection:addinstance', 'local_problemsection'), new moodle_url($pageurl));
 
-
 // Prepare datas for the form.
-$potentialtools = local_problemsection_potentialtools();
+$potentialtools = local_problemsection_potentialtools($context);
 $tools = array();
 foreach ($potentialtools as $potentialtool) {
     $enabled = $DB->record_exists('modules', array('name' => $potentialtool, 'visible' => 1));

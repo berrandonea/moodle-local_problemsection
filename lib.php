@@ -92,18 +92,32 @@ function local_problemsection_addgroups($data, $context, $groupingid) {
 
 /**
  * Creates the problem section.
- * @global object $DB
  * @param object $data
+ * @return int
  */
 function local_problemsection_create($data) {
-    global $DB;
     $context = context_course::instance($data->courseid);
     require_capability('moodle/course:update', $context);
     require_capability('local/problemsection:addinstance', $context);
     $section = local_problemsection_createsection($data->name, $data->courseid, $data->summary);
     $groupingid = local_problemsection_creategrouping($data->name, $data->courseid, $section->id);
     local_problemsection_addgroups($data, $context, $groupingid);
-    $sequence = local_problemsection_createmodules($section, $groupingid, $data);
+    $sequence = local_problemsection_createmodules($section, $groupingid, $data, $context);
+    $problemsectionid = local_problemsection_record($data, $section, $groupingid, $sequence);
+    return $problemsectionid;
+}
+
+/**
+ * Records a problem section in the database.
+ * @global object $DB
+ * @param type $data
+ * @param type $section
+ * @param type $groupingid
+ * @param type $sequence
+ * @return type
+ */
+function local_problemsection_record($data, $section, $groupingid, $sequence) {
+    global $DB;
     $problemsection = new stdClass();
     $problemsection->courseid = $data->courseid;
     $problemsection->sectionid = $section->id;
@@ -255,15 +269,17 @@ function local_problemsection_get_studentids($contextid) {
 /**
  * Get the list of communication tools a teacher can choose from when creating a problem section.
  * @global object $DB
+ * @param object $coursecontext
  * @return array of strings
  */
-function local_problemsection_potentialtools() {
+function local_problemsection_potentialtools($coursecontext) {
     global $DB;
     $potentialtools = array();
     $enabledmods = $DB->get_records('modules', array('visible' => 1));
     foreach ($enabledmods as $mod) {
         $showmod = get_config('local_problemsection', $mod->name);
-        if ($showmod) {
+        $canadd = has_capability("mod/$mod->name:addinstance", $coursecontext);
+        if ($showmod && $canadd) {
             $potentialtools[] = $mod->name;
         }
     }
@@ -277,11 +293,11 @@ function local_problemsection_potentialtools() {
  * @param int $groupingid
  * @param object $data
  */
-function local_problemsection_createmodules($section, $groupingid, $data) {
+function local_problemsection_createmodules($section, $groupingid, $data, $coursecontext) {
     global $DB;
-    $assigncmid = local_problemsection_createassign($section, $groupingid, $data);
+    $assigncmid = local_problemsection_createtool('assign', $data, $section, $groupingid);
     $sequence = $assigncmid;
-    $potentialtools = local_problemsection_potentialtools();
+    $potentialtools = local_problemsection_potentialtools($coursecontext);
     foreach ($potentialtools as $tool) {
         if (isset($data->$tool)) {
             if ($data->$tool) {
@@ -295,74 +311,67 @@ function local_problemsection_createmodules($section, $groupingid, $data) {
 }
 
 /**
- * Creates the assign module for the problem and links it to the grouping
+ * Creates a tool for the students and links it to the grouping
+ * @global object $CFG
+ * @param string $tool
+ * @param object $data
  * @param object $section
  * @param int $groupingid
- * @param object $data
  * @return int
  */
-function local_problemsection_createassign($section, $groupingid, $data) {
+function local_problemsection_createtool($tool, $data, $section, $groupingid) {
+    global $CFG;
     $moduleinfo = new stdClass();
-    $moduleinfo->modulename = 'assign';
-    $moduleinfo->name = get_string('pluginname', 'mod_assign');
+    $moduleinfo->modulename = $tool;
+    $moduleinfo->name = get_string('pluginname', "mod_$tool");
     $moduleinfo->course = $data->courseid;
     $moduleinfo->cmidnumber = '';
     $moduleinfo->section = $section->section;
-    $moduleinfo->introeditor = $data->directions;
-    $moduleinfo->introeditor['itemid'] = file_get_submitted_draft_itemid('introeditor');
-    $moduleinfo->duedate = $data->dateto;
-    $moduleinfo->allowsubmissionsfromdate = $data->datefrom;
-    $moduleinfo->cutoffdate = 0;
     $moduleinfo->visible = 1;
     $moduleinfo->groupmode = 1;
     $moduleinfo->groupingid = $groupingid;
-    $moduleinfo->submissiondrafts = 0;
-    $moduleinfo->sendnotifications = 0;
-    $moduleinfo->sendlatenotifications = 0;
-    $moduleinfo->requiresubmissionstatement = 0;
-    $moduleinfo->grade = 100;
-    $moduleinfo->teamsubmission = true;
-    $moduleinfo->teamsubmissiongroupingid = $groupingid;
-    $moduleinfo->requireallteammemberssubmit = false;
-    $moduleinfo->blindmarking = false;
-    $moduleinfo->markingworkflow = 0;
-    $moduleinfo->markingallocation = 0;
+
+    if ($tool == 'assign') {
+        $moduleinfo->introeditor = $data->directions;
+        $moduleinfo->introeditor['itemid'] = file_get_submitted_draft_itemid('introeditor');
+    } else {
+        $introtext = get_string('pleaseuse', 'local_problemsection').' '.$data->name;
+        $moduleinfo->introeditor = array('text' => $introtext,
+                                         'format' => FORMAT_HTML, 'itemid' => 0);
+    }
+
+    switch ($tool) {
+        case 'assign':
+            $moduleinfo->duedate = $data->dateto;
+            $moduleinfo->allowsubmissionsfromdate = $data->datefrom;
+            $moduleinfo->cutoffdate = 0;
+            $moduleinfo->submissiondrafts = 0;
+            $moduleinfo->sendnotifications = 0;
+            $moduleinfo->sendlatenotifications = 0;
+            $moduleinfo->requiresubmissionstatement = 0;
+            $moduleinfo->grade = 100;
+            $moduleinfo->teamsubmission = true;
+            $moduleinfo->teamsubmissiongroupingid = $groupingid;
+            $moduleinfo->requireallteammemberssubmit = false;
+            $moduleinfo->blindmarking = false;
+            $moduleinfo->markingworkflow = 0;
+            $moduleinfo->markingallocation = 0;
+            break;
+
+        case 'chat':
+            $moduleinfo->chattime = time();
+            break;
+
+        case 'publication':
+            require_once("$CFG->dirroot/mod/publication/locallib.php");
+            $moduleinfo->obtainteacherapproval = 1; // In mod_publication, 1 means no teacher approval needed.
+            break;
+
+        case 'glossary':
+            $moduleinfo->displayformat = 'dictionary';
+            break;
+    }
+
     $createdmoduleinfo = create_module($moduleinfo);
     return $createdmoduleinfo->coursemodule;
-}
-
-/**
- * Creates a tool for the students and links it to the grouping
- * @global object $DB
- * @param type $tool
- * @param type $data
- * @param type $sectionid
- * @param type $groupingid
- * @return type
- */
-function local_problemsection_createtool($tool, $data, $section, $groupingid) {
-    global $DB;
-    $now = time();
-    $instance = new stdClass();
-    $instance->course = $data->courseid;
-    $instance->name = get_string('pluginname', "mod_$tool");
-    $instance->intro = get_string('pleaseuse', 'local_problemsection').' '.$data->name;
-    $instance->introformat = FORMAT_HTML;
-    if ($tool == 'publication') {
-        $instance->obtainteacherapproval = 1; // In mod_publication, 1 means no teacher approval needed.
-    }
-    $instance->id = $DB->insert_record($tool, $instance);
-    $module = $DB->get_record('modules', array('name' => $tool));
-    $cm = new stdClass();
-    $cm->course = $data->courseid;
-    $cm->module = $module->id;
-    $cm->instance = $instance->id;
-    $cm->section = $section->id;
-    $cm->added = $now;
-    $cm->visible = 1;
-    $cm->visibleold = 1;
-    $cm->groupmode = 1;
-    $cm->groupingid = $groupingid;
-    $cm->id = $DB->insert_record('course_modules', $cm);
-    return $cm->id;
 }

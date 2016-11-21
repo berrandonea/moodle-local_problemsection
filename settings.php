@@ -41,18 +41,15 @@ if ($hassiteconfig) {
                                                                get_string('choosepotentialtools', 'local_problemsection')));
 
     $enabledmods = $DB->get_records('modules', array('visible' => 1));
-    $commontools = array('chat', 'forum', 'etherpadlite', 'publication', 'wiki');
+    $commontools = array('chat', 'etherpadlite', 'forum', 'publication', 'wiki');
     foreach ($enabledmods as $mod) {
         if (in_array($mod->name, $commontools)) {
-            $defaultcheck = true;
-        } else {
-            $defaultcheck = false;
-        }
-        $modcheckbox = new admin_setting_configcheckbox("local_problemsection/$mod->name",
+            $modcheckbox = new admin_setting_configcheckbox("local_problemsection/$mod->name",
                                                         get_string('pluginname',
                                                         "mod_$mod->name"),
-                                                        '', $defaultcheck);
-        $settings->add($modcheckbox);
+                                                        '', true);
+            $settings->add($modcheckbox);
+        }
     }
     $ADMIN->add('localplugins', $settings);
 }
