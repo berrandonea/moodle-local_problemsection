@@ -142,23 +142,26 @@ class local_problemsection_nonmembers_selector extends group_non_members_selecto
         $potentialmembers = array();
         $strstudent = get_string('potentialstudents');
         $potentialmembers[$strstudent] = array();
-
+	$groupinggroups = $DB->get_records('groupings_groups', array('groupingid' => $this->groupingid));
         foreach ($studentids as $studentid) {
-            $sql = "SELECT COUNT(u.id) AS nbuser, u.id, u.firstname, u.lastname, u.email, "
-                    . "CONCAT(u.firstname,u.lastname) AS fullname "
-                    . "FROM mdl_user u, mdl_groups_members gm, mdl_groupings_groups gg "
-                    . "WHERE u.id = gm.userid AND gm.groupid = gg.groupid "
-                    . "AND gg.groupingid = $this->groupingid AND u.id = $studentid GROUP BY u.id";
-            $user = $DB->get_record_sql($sql);
+	    $ingrouping = false;
+	    foreach ($groupinggroups as $groupinggroup) {
+		$ingroup = $DB->record_exists('groups_members', array('groupid' => $groupinggroup->groupid, 'userid' => $studentid));
+		if ($ingroup) {
+		    $ingrouping = true;
+		}
+	    }
+	    reset($groupinggroups);
+	    $user = $DB->get_record('user', array('id' => $studentid));
+
             // If the user is not already somewhere in this grouping, we place him in the list.
-            if (($user->nbuser) == 0) {
+            if ($ingrouping == false) {
                 $potentialusermember = new stdClass();
                 $potentialusermember->id = $user->id;
                 $potentialusermember->firstname = $user->firstname;
                 $potentialusermember->lastname = $user->lastname;
                 $potentialusermember->email = $user->email;
-//                $potentialusermember->fullname = $user->firstname.' '.$user->lastname;
-                $potentialusermember->fullname = $user->fullname;
+                $potentialusermember->fullname = $user->firstname.' '.$user->lastname;
                 $potentialmembers[$strstudent][$potentialusermember->id] = $potentialusermember;
             }
         }
