@@ -14,7 +14,8 @@ Author : Brice Errandonea <brice.errandonea@u-cergy.fr>
 Successfully tested on Moodle 2.9, 3.1+
 
 A "problem section" is a special section in a Moodle course. It always contains an assignment, that a few student teams will take.
-To work together, these students can be given various collaboration tools : a forum, a chat, an etherpad-lite module if you have this plugin on your Moodle, ...
+To work together, these students can be given various collaboration tools : a forum, a chat and/or a wiki (mod_etherpadlite and mod_publication are also supported if you 
+have them on your Moodle site).
 
 Of course, all of these tools already exist on Moodle without local_problemsection. What changes here is that you don't have to spend an hour to create the section, 
 the grouping, the groups, the modules, set the modules to work with the grouping, and so on ... (many teachers would give up before ending this, anyway).
