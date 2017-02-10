@@ -358,7 +358,7 @@ function local_problemsection_createtool($tool, $data, $section, $groupingid) {
 
         case 'chat':
             $moduleinfo->chattime = time();
-            $moduleinfo->shedule = 0;
+            $moduleinfo->schedule = 0;
             break;
 
         case 'forum':
