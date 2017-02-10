@@ -158,8 +158,10 @@ class local_problemsection_nonmembers_selector extends group_non_members_selecto
             if ($ingrouping == false) {
                 $potentialusermember = new stdClass();
                 $potentialusermember->id = $user->id;
-                $potentialusermember->firstname = $user->firstname;
-                $potentialusermember->lastname = $user->lastname;
+		$allnames = get_all_user_name_fields();
+		foreach ($allnames as $allname) {
+		    $potentialusermember->$allname = $user->$allname;
+		}
                 $potentialusermember->email = $user->email;
                 $potentialusermember->fullname = $user->firstname.' '.$user->lastname;
                 $potentialmembers[$strstudent][$potentialusermember->id] = $potentialusermember;
