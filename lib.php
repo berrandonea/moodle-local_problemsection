@@ -247,19 +247,6 @@ function local_problemsection_creategroup($courseid, $name, $groupnum, $grouping
 function local_problemsection_get_studentids($context) {
     $students = get_enrolled_users($context, 'local/problemsection:take');
     $studentids = array();
-//    $params = array('capability' => 'local/problemsection:take', 'permission' => 1);
-//    $roles = $DB->get_records('role_capabilities', $params);
-//    foreach ($roles as $role) {
-//        $roleparams = array('roleid' => $role->roleid, 'contextid' => $contextid);
-//        $roleusers = $DB->get_recordset('role_assignments', $roleparams);
-//        foreach ($roleusers as $roleuser) {
-//            $studentid = $roleuser->userid;
-//            if ($DB->record_exists('user', array('id' => $studentid))) {
-//                $studentids[] = $studentid;
-//            }
-//        }
-//        $roleusers->close();
-//    }
     foreach ($students as $student) {
         $studentids[] = $student->id;
     }
