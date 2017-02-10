@@ -358,7 +358,11 @@ function local_problemsection_createtool($tool, $data, $section, $groupingid) {
 
         case 'chat':
             $moduleinfo->chattime = time();
+            $moduleinfo->shedule = 0;
             break;
+
+        case 'forum':
+            $moduleinfo->type = 'general';
 
         case 'publication':
             require_once("$CFG->dirroot/mod/publication/locallib.php");
