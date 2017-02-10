@@ -86,7 +86,7 @@ function local_problemsection_addgroups($data, $context, $groupingid) {
         } else {
             $nbgroups = floor($data->nbgroups);
         }
-        local_problemsection_creategroups($nbgroups, $data->courseid, $context->id, $groupingid, $data->name);
+        local_problemsection_creategroups($nbgroups, $data->courseid, $context, $groupingid, $data->name);
     }
 }
 
@@ -206,8 +206,8 @@ function local_problemsection_copygrouping($copiedgroupingid, $pastedgroupingid)
  * @param int $groupingid
  * @param string $name
  */
-function local_problemsection_creategroups($nbgroups, $courseid, $contextid, $groupingid, $name) {
-    $studentids = local_problemsection_get_studentids($contextid);
+function local_problemsection_creategroups($nbgroups, $courseid, $context, $groupingid, $name) {
+    $studentids = local_problemsection_get_studentids($context);
     shuffle($studentids);
     $nbstudents = count($studentids);
     $nbstudentspergroup = ceil($nbstudents / $nbgroups);
@@ -241,25 +241,27 @@ function local_problemsection_creategroup($courseid, $name, $groupnum, $grouping
 
 /**
  * Get the ids of all the course users who can take this problem.
- * @global object $DB
- * @param int $contextid
+ * @param context $context
  * @return array of int
  */
-function local_problemsection_get_studentids($contextid) {
-    global $DB;
+function local_problemsection_get_studentids($context) {
+    $students = get_enrolled_users($context, 'local/problemsection:take');
     $studentids = array();
-    $params = array('capability' => 'local/problemsection:take', 'permission' => 1);
-    $roles = $DB->get_records('role_capabilities', $params);
-    foreach ($roles as $role) {
-        $roleparams = array('roleid' => $role->roleid, 'contextid' => $contextid);
-        $roleusers = $DB->get_recordset('role_assignments', $roleparams);
-        foreach ($roleusers as $roleuser) {
-            $studentid = $roleuser->userid;
-            if ($DB->record_exists('user', array('id' => $studentid))) {
-                $studentids[] = $studentid;
-            }
-        }
-        $roleusers->close();
+//    $params = array('capability' => 'local/problemsection:take', 'permission' => 1);
+//    $roles = $DB->get_records('role_capabilities', $params);
+//    foreach ($roles as $role) {
+//        $roleparams = array('roleid' => $role->roleid, 'contextid' => $contextid);
+//        $roleusers = $DB->get_recordset('role_assignments', $roleparams);
+//        foreach ($roleusers as $roleuser) {
+//            $studentid = $roleuser->userid;
+//            if ($DB->record_exists('user', array('id' => $studentid))) {
+//                $studentids[] = $studentid;
+//            }
+//        }
+//        $roleusers->close();
+//    }
+    foreach ($students as $student) {
+        $studentids[] = $student->id;
     }
     return $studentids;
 }

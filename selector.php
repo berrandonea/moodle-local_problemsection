@@ -138,7 +138,7 @@ class local_problemsection_nonmembers_selector extends group_non_members_selecto
         // Build the SQL.
         list($enrolsql, $enrolparams) = get_enrolled_sql($context);
 
-        $studentids = local_problemsection_get_studentids($context->id);
+        $studentids = local_problemsection_get_studentids($context);
         $potentialmembers = array();
         $strstudent = get_string('potentialstudents');
         $potentialmembers[$strstudent] = array();
