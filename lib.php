@@ -363,6 +363,7 @@ function local_problemsection_createtool($tool, $data, $section, $groupingid) {
 
         case 'forum':
             $moduleinfo->type = 'general';
+            break;
 
         case 'publication':
             require_once("$CFG->dirroot/mod/publication/locallib.php");
