@@ -48,6 +48,7 @@ $groupsurlstring = "$CFG->wwwroot/local/problemsection/groups.php?id=$courseid&p
 
 $course = $DB->get_record('course', array('id' => $courseid));
 $PAGE->set_pagelayout('admin');
+$PAGE->set_url('/local/problemsection/groups.php', array('id' => $courseid, 'psid' => $psid));
 require_login($course);
 $context = context_course::instance($course->id);
 require_capability('moodle/course:managegroups', $context);
