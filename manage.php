@@ -77,11 +77,7 @@ if ($deletedproblemsectionid && confirm_sesskey()) {
                 local_problemsection_delete($deletedproblemsection, $course, $sectioninfo);
                 redirect($manageurl);
             } else {
-                if (get_string_manager()->string_exists('deletesection', 'format_' . $course->format)) {
-                    $strdelete = get_string('deletesection', 'format_' . $course->format);
-                } else {
-                    $strdelete = get_string('deletesection');
-                }
+		$strdelete = get_string('deleteproblemsection', 'local_problemsection');
                 $PAGE->navbar->add($strdelete);
                 $PAGE->set_title($strdelete);
                 $PAGE->set_heading($course->fullname);
@@ -90,7 +86,7 @@ if ($deletedproblemsectionid && confirm_sesskey()) {
                 $optionsyes = array('id' => $courseid, 'confirm' => 1,
                     'delete' => $deletedproblemsectionid, 'sesskey' => sesskey());
                 $deleteurl = new moodle_url('/local/problemsection/manage.php', $optionsyes);
-                $formcontinue = new single_button($deleteurl, get_string('delete'));
+                $formcontinue = new single_button($deleteurl, get_string('deleteproblemsection', 'local_problemsection'));
                 $formcancel = new single_button($manageurl, get_string('cancel'), 'get');
                 echo $OUTPUT->confirm(get_string('warningdelete', 'local_problemsection',
                     $deletedproblemsection->name), $formcontinue, $formcancel);
@@ -119,7 +115,7 @@ if ($problemsections) {
     echo '<th>'.get_string('submissions', 'local_problemsection').'</th>';
     echo '<th>'.get_string('allowsubmissionsfromdate', 'assign').'</th>';
     echo '<th>'.get_string('duedate', 'assign').'</th>';
-    echo '<th>'.get_string('delete').'</th>';
+    echo '<th></th>';
     echo '</tr>';
     foreach ($problemsections as $problemsection) {
         $nbgroups = $DB->count_records('groupings_groups',
@@ -139,7 +135,8 @@ if ($problemsections) {
         } else {
             echo '<td></td><td></td><td></td>';
         }
-        echo "<td><a href='".$commondeleteurl.$problemsection->id."'><button>".get_string('delete')."</button></a></td>";
+        echo "<td><a href='".$commondeleteurl.$problemsection->id."'><button>"
+	    .get_string('deleteproblemsection', 'local_problemsection')."</button></a></td>";
         echo '</tr>';
     }
     echo '</table>';

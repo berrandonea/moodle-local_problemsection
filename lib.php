@@ -129,8 +129,8 @@ function local_problemsection_record($data, $section, $groupingid, $sequence) {
 }
 
 /**
- * Deletes a problem section, its grouping, its section, its modules,
- * but not the groups, since these can be used somewhere else.
+ * Deletes a problem section. Its grouping, its section, its modules,
+ * and its groups remain within the course, as ordinary ones.
  * @global object $DB
  * @param type $problemsection
  * @param type $course
@@ -138,8 +138,6 @@ function local_problemsection_record($data, $section, $groupingid, $sequence) {
  */
 function local_problemsection_delete($problemsection, $course, $sectioninfo) {
     global $DB;
-    course_delete_section($course, $sectioninfo, true);
-    groups_delete_grouping($problemsection->groupingid);
     $DB->delete_records('local_problemsection', array('id' => $problemsection->id));
 }
 
