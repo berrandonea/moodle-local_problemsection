@@ -77,7 +77,7 @@ if ($deletedproblemsectionid && confirm_sesskey()) {
                 local_problemsection_delete($deletedproblemsection, $course, $sectioninfo);
                 redirect($manageurl);
             } else {
-		$strdelete = get_string('deleteproblemsection', 'local_problemsection');
+                $strdelete = get_string('deleteproblemsection', 'local_problemsection');
                 $PAGE->navbar->add($strdelete);
                 $PAGE->set_title($strdelete);
                 $PAGE->set_heading($course->fullname);
@@ -136,7 +136,7 @@ if ($problemsections) {
             echo '<td></td><td></td><td></td>';
         }
         echo "<td><a href='".$commondeleteurl.$problemsection->id."'><button>"
-	    .get_string('deleteproblemsection', 'local_problemsection')."</button></a></td>";
+                .get_string('deleteproblemsection', 'local_problemsection')."</button></a></td>";
         echo '</tr>';
     }
     echo '</table>';

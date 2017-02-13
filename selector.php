@@ -142,26 +142,27 @@ class local_problemsection_nonmembers_selector extends group_non_members_selecto
         $potentialmembers = array();
         $strstudent = get_string('potentialstudents');
         $potentialmembers[$strstudent] = array();
-	$groupinggroups = $DB->get_records('groupings_groups', array('groupingid' => $this->groupingid));
+        $groupinggroups = $DB->get_records('groupings_groups', array('groupingid' => $this->groupingid));
         foreach ($studentids as $studentid) {
-	    $ingrouping = false;
-	    foreach ($groupinggroups as $groupinggroup) {
-		$ingroup = $DB->record_exists('groups_members', array('groupid' => $groupinggroup->groupid, 'userid' => $studentid));
-		if ($ingroup) {
-		    $ingrouping = true;
-		}
-	    }
-	    reset($groupinggroups);
-	    $user = $DB->get_record('user', array('id' => $studentid));
+            $ingrouping = false;
+            foreach ($groupinggroups as $groupinggroup) {
+                $ingroup = $DB->record_exists('groups_members',
+                        array('groupid' => $groupinggroup->groupid, 'userid' => $studentid));
+                if ($ingroup) {
+                    $ingrouping = true;
+                }
+            }
+            reset($groupinggroups);
+            $user = $DB->get_record('user', array('id' => $studentid));
 
             // If the user is not already somewhere in this grouping, we place him in the list.
             if ($ingrouping == false) {
                 $potentialusermember = new stdClass();
                 $potentialusermember->id = $user->id;
-		$allnames = get_all_user_name_fields();
-		foreach ($allnames as $allname) {
-		    $potentialusermember->$allname = $user->$allname;
-		}
+                $allnames = get_all_user_name_fields();
+                foreach ($allnames as $allname) {
+                    $potentialusermember->$allname = $user->$allname;
+                }
                 $potentialusermember->email = $user->email;
                 $potentialusermember->fullname = $user->firstname.' '.$user->lastname;
                 $potentialmembers[$strstudent][$potentialusermember->id] = $potentialusermember;
