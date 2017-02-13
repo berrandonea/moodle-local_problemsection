@@ -35,7 +35,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component  = 'local_problemsection';
-$plugin->release    = '1.1';
-$plugin->version    = 2016112102;
+$plugin->release    = '1.2';
+$plugin->version    = 2017021300;
 $plugin->requires   = 2014022000;
 $plugin->maturity   = MATURITY_STABLE;
