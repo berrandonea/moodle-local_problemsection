@@ -106,7 +106,7 @@ $commongroupsurl = "groups.php?id=$courseid&psid=";
 $commonsubmissionsurl = "$CFG->wwwroot/mod/assign/view.php?action=grading&id=";
 $commondeleteurl = "manage.php?id=$courseid&sesskey=".s(sesskey())."&delete=";
 echo $OUTPUT->header();
-echo "<a href='$addurl'><button>".get_string('problemsection:addinstance', 'local_problemsection')."</button></a>";
+echo "<a href='$addurl'><button class='btn'>".get_string('problemsection:addinstance', 'local_problemsection')."</button></a>";
 if ($problemsections) {
     echo '<table>';
     echo '<tr>';
@@ -135,7 +135,7 @@ if ($problemsections) {
         } else {
             echo '<td></td><td></td><td></td>';
         }
-        echo "<td><a href='".$commondeleteurl.$problemsection->id."'><button>"
+        echo "<td><a href='".$commondeleteurl.$problemsection->id."'><button class='btn'>"
                 .get_string('deleteproblemsection', 'local_problemsection')."</button></a></td>";
         echo '</tr>';
     }
@@ -143,5 +143,5 @@ if ($problemsections) {
 } else {
     echo '<p>'.get_string('noproblemyet', 'local_problemsection').'</p>';
 }
-echo "<a href='$CFG->wwwroot/course/view.php?id=$courseid'><button>".get_string('back')."</button></a>";
+echo "<a href='$CFG->wwwroot/course/view.php?id=$courseid'><button class='btn'>".get_string('back')."</button></a>";
 echo $OUTPUT->footer();
