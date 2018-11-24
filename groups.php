@@ -203,7 +203,7 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
     echo '</td>';
     echo '<td>';
     echo "<a href='$groupsurlstring&groupid=$group->id&action=cleargroup&sesskey=".s(sesskey())."'>";
-    echo '<button>'.get_string('cleargroup', 'local_problemsection').'</button>';
+    echo '<button class="btn">'.get_string('cleargroup', 'local_problemsection').'</button>';
     echo '</a>';
     echo '</td>';
     echo '</tr></table>';
@@ -255,7 +255,7 @@ foreach ($psgroupinggroups as $psgroupinggroup) {
     </div>
     <?php
 }
-echo "<a href='manage.php?id=$courseid'><button>".get_string('back')."</button></a>";
+echo "<a href='manage.php?id=$courseid'><button class='btn'>".get_string('back')."</button></a>";
 
 $potentialmembersselector->print_user_summaries($course->id);
 $PAGE->requires->js_init_call('init_add_remove_members_page', null, false, $potentialmembersselector->get_js_module());
