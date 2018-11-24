@@ -61,6 +61,7 @@ class problemsection_form extends moodleform {
 
         $mform->addElement('date_time_selector', 'datefrom', get_string('allowsubmissionsfromdate', 'assign'));
         $mform->addElement('date_time_selector', 'dateto', get_string('duedate', 'assign'));
+        $mform->addElement('date_time_selector', 'gradingduedate', get_string('gradingduedate', 'assign'));
 
         $mform->addElement('header', 'communicationhdr', get_string('communicationtools', 'local_problemsection'));
         foreach ($this->_customdata['tools'] as $tool) {

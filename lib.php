@@ -333,6 +333,7 @@ function local_problemsection_createtool($tool, $data, $section, $groupingid) {
     switch ($tool) {
         case 'assign':
             $moduleinfo->duedate = $data->dateto;
+            $moduleinfo->gradingduedate = $data->gradingduedate;
             $moduleinfo->allowsubmissionsfromdate = $data->datefrom;
             $moduleinfo->cutoffdate = 0;
             $moduleinfo->submissiondrafts = 0;
