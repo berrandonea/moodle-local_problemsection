@@ -36,6 +36,8 @@ require_once('../../config.php');
 require_once('lib.php');
 require_once($CFG->dirroot.'/user/selector/lib.php');
 
+require_login();
+
 class local_problemsection_members_selector extends group_members_selector {
     /**
      * Output this user_selector as HTML.
