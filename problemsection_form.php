@@ -64,7 +64,7 @@ class problemsection_form extends moodleform {
 
         $mform->addElement('header', 'communicationhdr', get_string('communicationtools', 'local_problemsection'));
         foreach ($this->_customdata['tools'] as $tool) {
-            $picture = '<img src="'.$OUTPUT->pix_url('icon', "mod_$tool").'">';
+            $picture = '<img src="'.$OUTPUT->image_url('icon', "mod_$tool").'">';
             $mform->addElement('advcheckbox', $tool, get_string('pluginname', $tool), $picture);
         }
 
