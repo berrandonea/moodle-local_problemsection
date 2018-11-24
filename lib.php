@@ -151,20 +151,23 @@ function local_problemsection_createsection($name, $courseid, $summary) {
     global $DB;
     $sql = "SELECT MAX(section) FROM {course_sections} WHERE course = $courseid";
     $maxsection = $DB->get_field_sql($sql);
-    $section = new stdClass();
-    $section->course = $courseid;
-    $section->section = $maxsection + 1;
-    $section->name = $name;
-    $section->summary = $summary['text'];
-    $section->summaryformat = $summary['format'];;
-    $section->visible = 1;
-    $section->id = $DB->insert_record('course_sections', $section);
-    $courseformat = course_get_format($courseid);
-    $courseformatoptions = $courseformat->get_format_options();
-    $courseformatoptions['numsections']++;
-    $courseformat->update_course_format_options(
-        array('numsections' => $courseformatoptions['numsections'])
-    );
+    course_create_sections_if_missing($courseid, $maxsection + 1);
+    //~ $section = new stdClass();
+    //~ $section->course = $courseid;
+    //~ $section->section = $maxsection + 1;
+    //~ $section->name = $name;
+    //~ $section->summary = $summary['text'];
+    //~ $section->summaryformat = $summary['format'];;
+    //~ $section->visible = 1;
+    //~ $section->id = $DB->insert_record('course_sections', $section);
+    //~ $courseformat = course_get_format($courseid);
+    //~ $courseformatoptions = $courseformat->get_format_options();
+    //~ $courseformatoptions['numsections']++;
+    //~ $courseformat->update_course_format_options(
+        //~ array('numsections' => $courseformatoptions['numsections'])
+    //~ );
+    $section = $DB->get_record('course_sections',
+               array('section' => ($maxsection + 1), 'course' => $courseid));
     return $section;
 }
 
